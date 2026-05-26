@@ -88,8 +88,8 @@ require __DIR__ . '/../partials/header.php';
               </div>
 
               <div class="mt-4 text-[10px] uppercase tracking-widest font-extrabold text-ink-400">Your monthly EMI</div>
-              <div class="mt-1 font-mono text-4xl font-extrabold nums text-ink" x-text="'₹' + formatINR(emi)"></div>
-              <p class="text-[11px] text-ink-400 mt-1">at <span x-text="rate.toFixed(1)"></span>% for <span x-text="tenure"></span> months on <span x-text="formatAbbrev(amount)"></span></p>
+              <div class="mt-1 font-mono text-4xl font-extrabold nums text-ink" x-text="'₹' + formatINR(emi)">₹31,541</div>
+              <p class="text-[11px] text-ink-400 mt-1">at <span x-text="rate.toFixed(1)">9.5</span>% for <span x-text="tenure">60</span> months on <span x-text="formatAbbrev(amount)">₹15.0 L</span></p>
 
               <!-- breakdown bar -->
               <div class="mt-4 h-2 rounded-full bg-surface-100 overflow-hidden flex">
@@ -105,19 +105,19 @@ require __DIR__ . '/../partials/header.php';
               <div class="mt-5 space-y-4 flex-1">
                 <label class="block">
                   <div class="flex justify-between text-[11px] font-bold text-ink-500 mb-1.5">
-                    <span>Loan amount</span><span class="nums text-ink font-extrabold" x-text="formatAbbrev(amount)"></span>
+                    <span>Loan amount</span><span class="nums text-ink font-extrabold" x-text="formatAbbrev(amount)">₹15.0 L</span>
                   </div>
                   <input type="range" min="100000" max="10000000" step="50000" x-model.number="amount" class="range-brand w-full">
                 </label>
                 <label class="block">
                   <div class="flex justify-between text-[11px] font-bold text-ink-500 mb-1.5">
-                    <span>Interest rate</span><span class="nums text-ink font-extrabold" x-text="rate.toFixed(1) + '% p.a.'"></span>
+                    <span>Interest rate</span><span class="nums text-ink font-extrabold" x-text="rate.toFixed(1) + '% p.a.'">9.5% p.a.</span>
                   </div>
                   <input type="range" min="6" max="22" step="0.1" x-model.number="rate" class="range-brand w-full">
                 </label>
                 <label class="block">
                   <div class="flex justify-between text-[11px] font-bold text-ink-500 mb-1.5">
-                    <span>Tenure</span><span class="nums text-ink font-extrabold" x-text="tenure + ' mo'"></span>
+                    <span>Tenure</span><span class="nums text-ink font-extrabold" x-text="tenure + ' mo'">60 mo</span>
                   </div>
                   <input type="range" min="6" max="360" step="6" x-model.number="tenure" class="range-brand w-full">
                 </label>
@@ -194,14 +194,14 @@ require __DIR__ . '/../partials/header.php';
 
     <!-- Tab nav -->
     <div class="mt-10 flex justify-center">
-      <div class="inline-flex p-1.5 rounded-full bg-surface-100 border border-ink/5 shadow-card">
-        <button @click="tab='emi'" :class="tab==='emi' ? 'tool-tab active' : 'tool-tab'">
+      <div class="inline-flex flex-wrap gap-1 p-1.5 rounded-full bg-surface-100 border border-ink/5 shadow-card">
+        <button type="button" @click="tab='emi'" class="tool-tab" :class="{ 'active': tab==='emi' }">
           EMI Calculator
         </button>
-        <button @click="tab='eligibility'" :class="tab==='eligibility' ? 'tool-tab active' : 'tool-tab'">
+        <button type="button" @click="tab='eligibility'" class="tool-tab" :class="{ 'active': tab==='eligibility' }">
           Eligibility
         </button>
-        <button @click="tab='compare'" :class="tab==='compare' ? 'tool-tab active' : 'tool-tab'">
+        <button type="button" @click="tab='compare'" class="tool-tab" :class="{ 'active': tab==='compare' }">
           Compare
         </button>
       </div>
@@ -253,17 +253,17 @@ require __DIR__ . '/../partials/header.php';
           <div class="absolute top-4 right-4 w-16 h-16 text-white/15 dotted"></div>
           <div class="relative">
             <div class="text-[11px] uppercase tracking-[0.2em] text-white/70 font-extrabold">Your monthly EMI</div>
-            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" x-text="'₹' + formatNum(emi)"></div>
-            <div class="mt-1 text-sm text-white/60">on a ₹<span class="nums" x-text="formatNum(amount)"></span> loan</div>
+            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" x-text="'₹' + formatNum(emi)">₹0</div>
+            <div class="mt-1 text-sm text-white/60">on a ₹<span class="nums" x-text="formatNum(amount)">0</span> loan</div>
 
             <div class="mt-7 grid grid-cols-2 gap-3 text-sm">
               <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
                 <div class="text-white/70 text-[10px] uppercase tracking-wider font-extrabold">Total interest</div>
-                <div class="font-mono text-xl mt-1 nums font-extrabold" x-text="'₹' + formatNum(totalInterest)"></div>
+                <div class="font-mono text-xl mt-1 nums font-extrabold" x-text="'₹' + formatNum(totalInterest)">₹0</div>
               </div>
               <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
                 <div class="text-white/70 text-[10px] uppercase tracking-wider font-extrabold">Total payment</div>
-                <div class="font-mono text-xl mt-1 nums font-extrabold" x-text="'₹' + formatNum(totalPayment)"></div>
+                <div class="font-mono text-xl mt-1 nums font-extrabold" x-text="'₹' + formatNum(totalPayment)">₹0</div>
               </div>
             </div>
 
@@ -275,7 +275,7 @@ require __DIR__ . '/../partials/header.php';
                           stroke-dasharray="100" :stroke-dashoffset="100 - principalPct" pathLength="100"
                           stroke-linecap="round" style="transition: stroke-dashoffset 400ms ease"></circle>
                 </svg>
-                <div class="absolute inset-0 flex items-center justify-center text-xs font-extrabold nums" x-text="principalPct.toFixed(0) + '%'"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-xs font-extrabold nums" x-text="principalPct.toFixed(0) + '%'">0%</div>
               </div>
               <div class="text-xs leading-relaxed text-white/85 font-semibold">
                 <div><span class="inline-block w-2 h-2 rounded-full bg-accent-500 mr-1.5"></span>Principal</div>
@@ -300,11 +300,13 @@ require __DIR__ . '/../partials/header.php';
             <div class="sm:col-span-2">
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">I want a</label>
               <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <template x-for="t in ['personal','home','business','gold','lap','education','vehicle']" :key="t">
-                  <button @click="loanType=t"
-                          :class="loanType===t ? 'bg-brand-500 text-white border-brand-500 shadow-card' : 'bg-white text-ink border-ink/10 hover:border-brand-500'"
-                          class="text-xs font-extrabold py-3 px-3 rounded-xl border-2 capitalize transition" x-text="t === 'lap' ? 'LAP' : t"></button>
-                </template>
+                <?php foreach (['personal','home','business','gold','lap','education','vehicle'] as $t): ?>
+                  <button type="button" @click="loanType='<?= $t ?>'"
+                          class="text-xs font-extrabold py-3 px-3 rounded-xl border-2 capitalize transition bg-white text-ink border-ink/10 hover:border-brand-500"
+                          :class="loanType==='<?= $t ?>' ? '!bg-brand-500 !text-white !border-brand-500 shadow-card' : ''">
+                    <?= $t === 'lap' ? 'LAP' : $t ?>
+                  </button>
+                <?php endforeach; ?>
               </div>
             </div>
             <div>
@@ -341,8 +343,8 @@ require __DIR__ . '/../partials/header.php';
           <div class="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-accent-500/25 blur-2xl"></div>
           <div class="relative">
             <div class="text-[11px] uppercase tracking-[0.2em] text-white/70 font-extrabold">You're eligible for up to</div>
-            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" x-text="result.eligible ? '₹' + formatNum(result.amount) : '—'"></div>
-            <p class="mt-3 text-sm text-white/80 leading-relaxed" x-text="result.message"></p>
+            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" x-text="result.eligible ? '₹' + formatNum(result.amount) : '—'">₹0</div>
+            <p class="mt-3 text-sm text-white/80 leading-relaxed" x-text="result.message">Enter your details to see eligibility.</p>
             <a href="#lead-form" x-show="result.eligible" @click="prefillLeadForm" class="mt-7 btn-accent w-full !justify-between">
               Get matched with a lender
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -628,137 +630,5 @@ require __DIR__ . '/../partials/header.php';
     </div>
   </div>
 </section>
-
-<script>
-function emiCore(P, R, N) {
-  if (P <= 0 || N <= 0) return 0;
-  if (R === 0) return P / N;
-  const r = R / 12 / 100;
-  const pow = Math.pow(1 + r, N);
-  return (P * r * pow) / (pow - 1);
-}
-
-function emiHero() {
-  return {
-    amount: 1500000,
-    rate: 9.5,
-    tenure: 60,
-    get emi() { return emiCore(this.amount, this.rate, this.tenure); },
-    get principalPct() {
-      const totalPay = this.emi * this.tenure;
-      return totalPay > 0 ? (this.amount / totalPay) * 100 : 0;
-    },
-    formatINR(n) { return Math.round(n).toLocaleString('en-IN'); },
-    formatAbbrev(n) {
-      if (n >= 10000000) return '₹' + (n/10000000).toFixed(2) + ' Cr';
-      if (n >= 100000) return '₹' + (n/100000).toFixed(1) + ' L';
-      return '₹' + Math.round(n).toLocaleString('en-IN');
-    }
-  };
-}
-
-const RATE_DEFAULTS = {
-  personal: 10.5, home: 8.5, business: 12, gold: 9, lap: 9.5, education: 10, vehicle: 9.5
-};
-const TENURE_DEFAULTS = {
-  personal: 36, home: 240, business: 36, gold: 12, lap: 120, education: 84, vehicle: 60
-};
-const AMOUNT_DEFAULTS = {
-  personal: 500000, home: 5000000, business: 1500000, gold: 300000, lap: 3000000, education: 1500000, vehicle: 800000
-};
-
-function emiCalc() {
-  return {
-    loanType: 'personal',
-    amount: 500000,
-    rate: 10.5,
-    tenure: 36,
-    syncDefaults() {
-      this.amount = AMOUNT_DEFAULTS[this.loanType];
-      this.rate = RATE_DEFAULTS[this.loanType];
-      this.tenure = TENURE_DEFAULTS[this.loanType];
-    },
-    get emi() { return Math.round(emiCore(this.amount, this.rate, this.tenure)); },
-    get totalPayment() { return this.emi * this.tenure; },
-    get totalInterest() { return Math.max(0, this.totalPayment - this.amount); },
-    get principalPct() { return this.totalPayment > 0 ? (this.amount / this.totalPayment) * 100 : 0; },
-    formatNum(n) { return Math.round(n).toLocaleString('en-IN'); },
-    prefillLeadForm() {
-      window.__leadPrefill = this.loanType;
-      window.__leadAmount = this.amount;
-    }
-  };
-}
-
-function eligibilityCheck() {
-  return {
-    loanType: 'personal',
-    income: 60000,
-    existingEmi: 0,
-    age: 30,
-    score: 'good',
-    get result() {
-      const inc = +this.income || 0;
-      const emi = +this.existingEmi || 0;
-      if (inc <= 0) return { eligible: false, amount: 0, message: 'Enter your monthly income to see eligibility.' };
-
-      let amount = 0, eligible = false, message = '';
-      switch (this.loanType) {
-        case 'personal': {
-          if (this.age < 21 || this.age > 60) { message = 'Age must be 21–60 for personal loans.'; break; }
-          if (this.score === 'below_650') { message = 'Score below 650 typically disqualifies personal loans. Try gold/LAP instead.'; break; }
-          const capacity = 24 * inc - 12 * emi;
-          if (capacity <= 0) { message = 'Existing EMIs leave no repayment headroom.'; break; }
-          amount = capacity; eligible = true;
-          message = 'Based on your income & EMI capacity. Final offer depends on credit history.';
-          break;
-        }
-        case 'home': {
-          const maxEmi = inc * 0.55 - emi;
-          if (maxEmi <= 0) { message = 'Existing EMIs leave no headroom for a home loan.'; break; }
-          const r = 8.5 / 12 / 100, n = 240, pow = Math.pow(1+r, n);
-          amount = maxEmi * (pow - 1) / (r * pow);
-          eligible = true; message = 'Assumes 8.5% over 20 years. Longer tenure increases the eligible amount.';
-          break;
-        }
-        case 'business': amount = inc * 12 * 0.30 * 10; eligible = inc > 0; message = 'Indicative — based on 30% of annual turnover (≈ income × 12).'; break;
-        case 'gold': amount = 4500000; eligible = true; message = 'Gold loans depend on pledged weight × value × 75% LTV. Talk to a consultant for an exact number.'; break;
-        case 'lap': amount = 6500000; eligible = true; message = 'Loan Against Property typically goes up to 65% of property value.'; break;
-        case 'education': amount = this.score === 'below_650' ? 750000 : 5000000; eligible = true; message = 'Without collateral, capped at ₹7.5L. With collateral or co-applicant, up to ₹50L.'; break;
-        case 'vehicle': amount = 680000; eligible = true; message = 'Up to 85% of on-road price. Some lenders cover 90% on select models.'; break;
-      }
-      return { eligible, amount: Math.round(amount), message };
-    },
-    formatNum(n) {
-      if (n >= 10000000) return (n/10000000).toFixed(2) + ' Cr';
-      if (n >= 100000) return (n/100000).toFixed(1) + ' L';
-      return Math.round(n).toLocaleString('en-IN');
-    },
-    prefillLeadForm() {
-      window.__leadPrefill = this.loanType;
-      window.__leadAmount = this.result.amount;
-    }
-  };
-}
-
-// Wire prefill into the lead form once Alpine inits it
-document.addEventListener('alpine:init', () => {
-  setTimeout(() => {
-    document.querySelectorAll('a[href="#lead-form"]').forEach(a => {
-      a.addEventListener('click', () => {
-        const lt = window.__leadPrefill;
-        if (!lt) return;
-        const root = document.getElementById('lead-form');
-        if (!root || !root.__x) return;
-        const data = root.__x.$data;
-        if (data && data.form) {
-          if (RATE_DEFAULTS[lt]) data.form.loan_type = lt;
-          if (window.__leadAmount && data.form.loan_type) data.form.loan_amount = window.__leadAmount;
-        }
-      });
-    });
-  }, 300);
-});
-</script>
 
 <?php require __DIR__ . '/../partials/footer.php'; ?>

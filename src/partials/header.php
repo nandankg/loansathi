@@ -17,7 +17,8 @@ $whatsapp  = config('contact.whatsapp');
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= asset('css/site.css') ?>">
-  <script defer src="https://unpkg.com/alpinejs@3.13.0/dist/cdn.min.js"></script>
+  <script defer src="<?= asset('js/tools.js?v=2') ?>"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
   <?php require __DIR__ . '/seo-meta.php'; ?>
 </head>
 <body class="min-h-screen flex flex-col bg-white selection:bg-accent-500/25 selection:text-ink">
