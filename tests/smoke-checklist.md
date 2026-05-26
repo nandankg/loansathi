@@ -5,7 +5,7 @@ Run after every deployment / major change.
 ## Build
 
 - [ ] `composer install`
-- [ ] `npm install && npm run build`
+- [ ] `npm install && npm run build` (re-run any time PHP templates are added/changed — Tailwind only emits classes it scans)
 - [ ] `php bin/install.php` (idempotent)
 
 ## Pages
