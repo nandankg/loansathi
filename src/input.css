@@ -8,36 +8,144 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply font-sans text-brand-slate bg-white antialiased;
+    @apply font-sans text-navy-ink bg-white antialiased;
+    font-feature-settings: "ss01", "cv11";
   }
   h1, h2, h3, h4 {
-    @apply font-sans font-extrabold text-navy tracking-tight;
+    @apply font-display font-semibold text-navy tracking-tight;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
   }
+  h1 { letter-spacing: -0.035em; }
+  h2 { letter-spacing: -0.025em; }
   a {
     @apply text-brand-blue hover:text-navy transition-colors;
   }
+  /* Numeric tabular numbers everywhere a number-looking thing renders */
+  .nums { font-variant-numeric: tabular-nums; }
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center bg-brand-amber text-navy font-bold px-5 py-3 rounded-lg shadow-card hover:bg-amber-400 transition-colors;
-  }
-  .btn-secondary {
-    @apply inline-flex items-center justify-center bg-white text-navy border-2 border-navy font-bold px-5 py-3 rounded-lg hover:bg-navy hover:text-white transition-colors;
-  }
-  .btn-ghost {
-    @apply inline-flex items-center justify-center text-navy font-semibold px-3 py-2 hover:text-brand-blue transition-colors;
-  }
   .container-page {
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
+  .container-tight {
+    @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-saffron text-navy font-bold px-6 py-3.5 rounded-full shadow-card hover:bg-saffron-500 hover:-translate-y-px transition-all duration-200;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-white text-navy border-2 border-navy/10 font-bold px-6 py-3.5 rounded-full hover:border-navy hover:-translate-y-px transition-all duration-200;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center text-navy font-semibold px-3 py-2 hover:text-saffron-500 transition-colors;
+  }
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 bg-navy text-white font-bold px-6 py-3.5 rounded-full hover:bg-navy-800 hover:-translate-y-px transition-all duration-200;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-cream-200 text-navy text-xs font-semibold px-3 py-1.5 border border-navy/5;
+  }
+  .chip-dark {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-white/10 text-cream text-xs font-semibold px-3 py-1.5 border border-white/15;
+  }
+
   .input-field {
-    @apply w-full rounded-lg border border-slate-300 px-4 py-3 text-navy placeholder:text-slate-400 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 outline-none transition;
+    @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-navy placeholder:text-slate-400 focus:border-saffron focus:ring-2 focus:ring-saffron/25 outline-none transition;
   }
   .input-field.error {
     @apply border-red-500 focus:border-red-500 focus:ring-red-200;
   }
   .error-text {
     @apply text-xs text-red-600 mt-1;
+  }
+
+  /* Editorial number ornament used to mark sections */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-saffron-600;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply w-6 h-px bg-saffron-600 inline-block;
+  }
+
+  /* Section heading style */
+  .h-section {
+    @apply font-display text-3xl sm:text-4xl lg:text-5xl text-navy font-semibold leading-[1.05];
+  }
+
+  /* Custom range slider — fintech feel */
+  .range-saffron {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    @apply rounded-full bg-cream-200 cursor-pointer;
+  }
+  .range-saffron::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px; height: 22px;
+    @apply rounded-full bg-saffron border-2 border-white shadow-card cursor-grab;
+  }
+  .range-saffron::-moz-range-thumb {
+    width: 22px; height: 22px; border: 2px solid white;
+    @apply rounded-full bg-saffron shadow-card cursor-grab;
+  }
+  .range-saffron:focus { outline: none; }
+  .range-saffron:focus::-webkit-slider-thumb { @apply ring-4 ring-saffron/30; }
+
+  /* Tool tabs */
+  .tool-tab {
+    @apply flex-1 sm:flex-none px-4 sm:px-6 py-3 rounded-full font-semibold text-sm text-navy/60 transition-all;
+  }
+  .tool-tab.active {
+    @apply bg-navy text-white shadow-card;
+  }
+
+  /* Custom card with subtle border & lift */
+  .card {
+    @apply bg-white rounded-3xl border border-navy/5 shadow-ring p-6 sm:p-8;
+  }
+  .card-tight {
+    @apply bg-white rounded-2xl border border-navy/5 shadow-card p-5;
+  }
+
+  /* Decorative grain layer */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.4;
+  }
+
+  /* Spotlight halo */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute; inset: -20%;
+    background: radial-gradient(closest-side, rgba(255,138,61,0.18), transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  /* Underline accent for inline keywords */
+  .ink-accent {
+    background: linear-gradient(180deg, transparent 70%, rgba(255,138,61,0.45) 70%);
+    padding: 0 0.05em;
+  }
+  /* Diagonal saffron stripe */
+  .stripe-saffron {
+    background: repeating-linear-gradient(135deg, rgba(255,138,61,0.18) 0 8px, transparent 8px 16px);
   }
 }

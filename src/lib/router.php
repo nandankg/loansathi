@@ -1,10 +1,31 @@
 <?php
 
 function routes_table(): array {
+    $stub = 'coming-soon';
     return [
-        '/'                 => 'home',
-        '/submit-lead'      => 'handlers/submit-lead',
-        '/thank-you'        => 'thank-you',
+        '/'                       => 'home',
+        '/submit-lead'            => 'handlers/submit-lead',
+        '/thank-you'              => 'thank-you',
+        // Loan landings (Plan 2 — currently stubbed to /coming-soon page)
+        '/personal-loan'          => $stub,
+        '/home-loan'              => $stub,
+        '/business-loan'          => $stub,
+        '/gold-loan'              => $stub,
+        '/loan-against-property'  => $stub,
+        '/education-loan'         => $stub,
+        '/vehicle-loan'           => $stub,
+        // Tools (Plan 3 — interactive versions already on homepage)
+        '/emi-calculator'         => $stub,
+        '/eligibility-checker'    => $stub,
+        '/loan-comparison'        => $stub,
+        '/application-guide'      => $stub,
+        // Static pages (Plan 2)
+        '/about'                  => $stub,
+        '/contact'                => $stub,
+        '/blog'                   => $stub,
+        '/privacy-policy'         => $stub,
+        '/terms-of-service'       => $stub,
+        '/disclaimer'             => $stub,
     ];
 }
 
