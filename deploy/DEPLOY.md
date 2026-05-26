@@ -148,6 +148,13 @@ SETUP_KEY=PUT_A_LONG_RANDOM_STRING_HERE
 **Generate a SETUP_KEY** — any 32+ random alphanumeric string. Example:
 `9f4a2b8c1d7e3f5a6b8c9d0e1f2a3b4c`. You'll use it once and then delete `setup.php`.
 
+> **Watch out:** any `.env` value that contains a **space** must be wrapped
+> in double quotes — e.g. `CONTACT_PHONE_DISPLAY="+91 98765 43210"`. Unquoted
+> whitespace makes `phpdotenv` throw a parse error during bootstrap, which
+> happens *before* PHP can show errors, so the site returns a generic 500
+> with no clue why. Email addresses, URLs, plain identifiers — no quotes
+> needed. Anything with a space — quote it.
+
 ---
 
 ## Step 5 — Run setup once
