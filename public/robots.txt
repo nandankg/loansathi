@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /submit-lead
+Disallow: /*?utm_*
+Disallow: /*?preview=
+
+Sitemap: https://loansathi.in/sitemap.xml
