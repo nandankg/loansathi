@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-brand-slate bg-white antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-sans font-extrabold text-navy tracking-tight;
+  }
+  a {
+    @apply text-brand-blue hover:text-navy transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center bg-brand-amber text-navy font-bold px-5 py-3 rounded-lg shadow-card hover:bg-amber-400 transition-colors;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center bg-white text-navy border-2 border-navy font-bold px-5 py-3 rounded-lg hover:bg-navy hover:text-white transition-colors;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center text-navy font-semibold px-3 py-2 hover:text-brand-blue transition-colors;
+  }
+  .container-page {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .input-field {
+    @apply w-full rounded-lg border border-slate-300 px-4 py-3 text-navy placeholder:text-slate-400 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 outline-none transition;
+  }
+  .input-field.error {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-200;
+  }
+  .error-text {
+    @apply text-xs text-red-600 mt-1;
+  }
+}
