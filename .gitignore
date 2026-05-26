@@ -1,0 +1,31 @@
+# Brainstorming session artifacts
+.superpowers/
+
+# Secrets & local config
+src/config/db.php
+.env
+.env.local
+
+# Build outputs / deps
+node_modules/
+vendor/
+public/assets/css/site.css
+
+# Logs
+storage/logs/*.log
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# PHP / Composer
+composer.lock
+.phpunit.result.cache
+
+# Uploaded blog images (typically deployed separately)
+public/assets/blog/*
+!public/assets/blog/.gitkeep
