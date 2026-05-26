@@ -54,19 +54,37 @@ find "$OUT/vendor" -type f \( -name '*.md' -o -name '*.markdown' -o -name '.giti
 # Make sure storage/logs is writable on the server (umask 0775)
 chmod -R 0775 "$OUT/storage" 2>/dev/null || true
 
-echo "==> Creating zip"
-if command -v zip >/dev/null 2>&1; then
-  ( cd release && zip -rq "$NAME.zip" "$NAME" )
-elif command -v powershell.exe >/dev/null 2>&1; then
-  # Git-Bash on Windows: fall back to PowerShell's Compress-Archive
-  WIN_OUT=$(cygpath -w "$ROOT/release/$NAME" 2>/dev/null || echo "$ROOT/release/$NAME")
-  WIN_ZIP=$(cygpath -w "$ROOT/release/$NAME.zip" 2>/dev/null || echo "$ROOT/release/$NAME.zip")
-  powershell.exe -NoProfile -Command "Compress-Archive -Path '${WIN_OUT}\\*' -DestinationPath '${WIN_ZIP}' -Force"
-else
-  echo "  ERROR: no 'zip' command and no PowerShell fallback available." >&2
-  echo "  Manually zip release/$NAME/ before uploading." >&2
-  exit 1
-fi
+echo "==> Creating zip (PHP ZipArchive — produces POSIX-compliant forward-slash paths)"
+# PowerShell Compress-Archive on Windows writes backslash path separators which
+# break extraction on Linux hosts (Hostinger). PHP's ZipArchive always writes
+# forward slashes per ZIP spec.
+# -d extension=zip forces the zip extension even if php-cli.ini lacks it.
+php -d extension=zip -r '
+$src = $argv[1];
+$dst = $argv[2];
+$zip = new ZipArchive();
+if ($zip->open($dst, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+    fwrite(STDERR, "Failed to open $dst\n"); exit(1);
+}
+$rii = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS),
+    RecursiveIteratorIterator::SELF_FIRST
+);
+$srcLen = strlen(realpath($src)) + 1;
+$count = 0;
+foreach ($rii as $file) {
+    $abs = $file->getPathname();
+    $rel = str_replace("\\", "/", substr(realpath($abs), $srcLen));
+    if ($file->isDir()) {
+        $zip->addEmptyDir($rel);
+    } else {
+        $zip->addFile($abs, $rel);
+        $count++;
+    }
+}
+$zip->close();
+fwrite(STDOUT, "Wrote $count files\n");
+' "$ROOT/release/$NAME" "$ROOT/release/$NAME.zip"
 
 SIZE_HUMAN=$(du -h "release/$NAME.zip" | cut -f1)
 echo
