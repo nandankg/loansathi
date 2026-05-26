@@ -1,5 +1,12 @@
 # Brainstorming session artifacts
 .superpowers/
+.claude/
+
+# Root-level screenshots/reference images pasted by user during sessions
+/*.jpg
+/*.jpeg
+/*.png
+/*.gif
 
 # Secrets & local config
 src/config/db.php
