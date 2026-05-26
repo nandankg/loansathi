@@ -1,12 +1,11 @@
 # Root .htaccess for public_html/ when the entire LoanSathi project sits at
 # the web root and there's no custom DocumentRoot available (Hostinger Single).
-# Routes every request through public/index.php and blocks direct access to
-# all non-public folders.
+#
+# IMPORTANT: do NOT set `DirectoryIndex public/index.php` here — that directive
+# is inherited by subdirectories, so when Apache later serves /public/ it would
+# look for public/public/index.php (which doesn't exist) and return 403. Rely on
+# the server-default DirectoryIndex (index.php) at each level instead.
 
-# When someone hits "/", serve through the public folder
-DirectoryIndex public/index.php
-
-# Disable directory listing (defense in depth — Hostinger sets this globally too)
 Options -Indexes
 
 RewriteEngine On
@@ -16,14 +15,13 @@ RewriteBase /
 # carries its own .htaccess with "Require all denied".
 RewriteRule ^(\.git|src|vendor|storage|bin|tests|node_modules|deploy)(/|$) - [F,L]
 
-# Already inside /public/ — don't loop. public/.htaccess takes over from here.
+# Already inside /public/ — don't re-rewrite. Apache resolves the file or hands
+# off to public/.htaccess from here.
 RewriteRule ^public(/|$) - [L]
 
-# Real files at root level (e.g. robots.txt if you ever put one here) — serve as-is.
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule ^ - [L]
-
-# Everything else, including the bare root path, forwards into /public/.
+# Everything else — forward into /public/. For the bare "/" request this becomes
+# /public/, which Apache resolves as a directory and serves via its default
+# DirectoryIndex (index.php → public_html/public/index.php).
 RewriteRule ^(.*)$ public/$1 [L]
 
 # Hide PHP-Powered-By header
