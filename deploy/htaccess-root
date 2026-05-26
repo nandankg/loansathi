@@ -3,6 +3,12 @@
 # Routes every request through public/index.php and blocks direct access to
 # all non-public folders.
 
+# When someone hits "/", serve through the public folder
+DirectoryIndex public/index.php
+
+# Disable directory listing (defense in depth — Hostinger sets this globally too)
+Options -Indexes
+
 RewriteEngine On
 RewriteBase /
 
@@ -10,13 +16,14 @@ RewriteBase /
 # carries its own .htaccess with "Require all denied".
 RewriteRule ^(\.git|src|vendor|storage|bin|tests|node_modules|deploy)(/|$) - [F,L]
 
-# Don't rewrite for real files (favicon.ico, robots.txt at root, etc.)
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
+# Already inside /public/ — don't loop. public/.htaccess takes over from here.
+RewriteRule ^public(/|$) - [L]
+
+# Real files at root level (e.g. robots.txt if you ever put one here) — serve as-is.
+RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
 
-# Everything else — forward into the public/ folder. The public/.htaccess takes
-# over from here (static assets resolve directly; routes hit public/index.php).
+# Everything else, including the bare root path, forwards into /public/.
 RewriteRule ^(.*)$ public/$1 [L]
 
 # Hide PHP-Powered-By header
