@@ -13,6 +13,9 @@ src/config/db.php
 .env
 .env.local
 
+# Release builds
+/release/
+
 # Build outputs / deps
 node_modules/
 vendor/

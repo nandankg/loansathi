@@ -1,30 +1,36 @@
 <?php
+$env = function(string $key, $default = null) {
+    $v = getenv($key);
+    if ($v === false || $v === '') return $default;
+    return $v;
+};
 return [
   'site_name'       => 'LoanSathi',
   'tagline'         => 'Your trusted loan companion',
-  'base_url'        => (function() {
+  'base_url'        => $env('BASE_URL') ?: (function() {
                         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
                         $scheme = (($_SERVER['HTTPS'] ?? '') === 'on') ? 'https' : 'http';
                         return $scheme . '://' . $host;
                       })(),
   'contact' => [
-    'phone'         => '+91XXXXXXXXXX',
-    'phone_display' => '+91 XXXXX XXXXX',
-    'whatsapp'      => '91XXXXXXXXXX',
-    'email'         => 'hello@loansathi.in',
-    'lead_inbox'    => 'leads@loansathi.in',
+    'phone'         => $env('CONTACT_PHONE',         '+91XXXXXXXXXX'),
+    'phone_display' => $env('CONTACT_PHONE_DISPLAY', '+91 XXXXX XXXXX'),
+    'whatsapp'      => $env('CONTACT_WHATSAPP',      '91XXXXXXXXXX'),
+    'email'         => $env('CONTACT_EMAIL',         'hello@loansathi.in'),
+    'lead_inbox'    => $env('CONTACT_LEAD_INBOX',    'leads@loansathi.in'),
   ],
   'smtp' => [
-    'host'          => getenv('SMTP_HOST') ?: 'localhost',
-    'port'          => (int)(getenv('SMTP_PORT') ?: 587),
-    'username'      => getenv('SMTP_USER') ?: '',
-    'password'      => getenv('SMTP_PASS') ?: '',
-    'secure'        => getenv('SMTP_SECURE') ?: 'tls',
-    'from_address'  => getenv('SMTP_FROM') ?: 'no-reply@loansathi.in',
+    'host'          => $env('SMTP_HOST',   'localhost'),
+    'port'          => (int)$env('SMTP_PORT', 587),
+    'username'      => $env('SMTP_USER',   ''),
+    'password'      => $env('SMTP_PASS',   ''),
+    'secure'        => $env('SMTP_SECURE', 'tls'),
+    'from_address'  => $env('SMTP_FROM',   'no-reply@loansathi.in'),
     'from_name'     => 'LoanSathi',
   ],
-  'gsc_verification' => '',
-  'bing_verification' => '',
+  'gsc_verification'  => $env('GSC_VERIFICATION',  ''),
+  'bing_verification' => $env('BING_VERIFICATION', ''),
+  'setup_key'         => $env('SETUP_KEY',         ''),
   'eligibility' => [
     'gold_rate_per_gram'   => 6000,
     'gold_ltv'             => 0.75,

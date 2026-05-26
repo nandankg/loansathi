@@ -1,0 +1,27 @@
+# Root .htaccess for public_html/ when the entire LoanSathi project sits at
+# the web root and there's no custom DocumentRoot available (Hostinger Single).
+# Routes every request through public/index.php and blocks direct access to
+# all non-public folders.
+
+RewriteEngine On
+RewriteBase /
+
+# Block direct access to sensitive folders. Defense in depth — each folder also
+# carries its own .htaccess with "Require all denied".
+RewriteRule ^(\.git|src|vendor|storage|bin|tests|node_modules|deploy)(/|$) - [F,L]
+
+# Don't rewrite for real files (favicon.ico, robots.txt at root, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Everything else — forward into the public/ folder. The public/.htaccess takes
+# over from here (static assets resolve directly; routes hit public/index.php).
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Hide PHP-Powered-By header
+<IfModule mod_headers.c>
+  Header unset X-Powered-By
+</IfModule>
+
+AddDefaultCharset UTF-8
