@@ -32,15 +32,16 @@ $page_robots = 'noindex,follow';
 require __DIR__ . '/../partials/header.php';
 ?>
 
-<section class="bg-navy text-white relative overflow-hidden grain">
-  <div class="absolute -top-32 -right-32 w-[36rem] h-[36rem] rounded-full bg-radial-amber opacity-90 pointer-events-none"></div>
+<section class="bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 text-white relative overflow-hidden">
+  <div class="absolute inset-0 bg-grid bg-[length:48px_48px] opacity-15 pointer-events-none"></div>
+  <div class="absolute -top-32 -right-32 w-[36rem] h-[36rem] rounded-full bg-accent-500/30 blur-3xl pointer-events-none"></div>
   <div class="container-page relative py-20 lg:py-28">
     <div class="max-w-2xl">
-      <span class="chip-dark">Section under construction</span>
-      <h1 class="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl leading-[1] font-semibold">
-        <?= e($label) ?> <span class="italic font-light text-cream">page</span> is on its way.
+      <span class="chip-dark"><span class="w-1.5 h-1.5 rounded-full bg-success-400"></span> Under construction</span>
+      <h1 class="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.02] font-extrabold">
+        <?= e($label) ?> <span class="text-accent-500">page</span> is on its way.
       </h1>
-      <p class="mt-7 text-lg text-cream/80 leading-relaxed max-w-xl">
+      <p class="mt-7 text-lg text-white/80 leading-relaxed max-w-xl">
         <?php if ($isToolPage): ?>
           The standalone <?= e($label) ?> page is being built. In the meantime, the full interactive tool is already live on our homepage.
         <?php elseif ($loanType !== null): ?>
@@ -50,12 +51,12 @@ require __DIR__ . '/../partials/header.php';
         <?php endif; ?>
       </p>
       <div class="mt-9 flex flex-wrap gap-3">
-        <a href="/<?= e($anchor) ?>" class="btn-primary">
+        <a href="/<?= e($anchor) ?>" class="btn-accent">
           <?php if ($isToolPage): ?>Go to the tool<?php elseif ($loanType !== null): ?>Try the calculator<?php else: ?>Back to home<?php endif; ?>
-          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <?php if ($loanType !== null): ?>
-          <a href="/#lead-form" onclick="window.__leadPrefill='<?= e($loanType) ?>'" class="btn-secondary !bg-white/5 !border-white/20 !text-white hover:!bg-white hover:!text-navy">
+          <a href="/#lead-form" onclick="window.__leadPrefill='<?= e($loanType) ?>'" class="btn-secondary !bg-white/10 !border-white/30 !text-white hover:!bg-white hover:!text-ink">
             Get a <?= e($label) ?> callback
           </a>
         <?php endif; ?>
@@ -64,29 +65,29 @@ require __DIR__ . '/../partials/header.php';
   </div>
 </section>
 
-<section class="py-16 bg-cream-50">
+<section class="py-16 bg-surface-100">
   <div class="container-page">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <a href="/#tools" class="card group hover:-translate-y-1 transition">
-        <div class="text-saffron-600">
-          <svg viewBox="0 0 24 24" class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-        </div>
-        <h3 class="mt-4 font-display text-xl">Run the numbers</h3>
-        <p class="mt-2 text-sm text-navy/65">EMI, eligibility, rate comparison — all interactive, no sign-up.</p>
+        <span class="icon-badge bg-brand-50 text-brand-500">
+          <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Run the numbers</h3>
+        <p class="mt-2 text-sm text-ink-500">EMI, eligibility, rate comparison — all interactive, no sign-up.</p>
       </a>
       <a href="/#loans" class="card group hover:-translate-y-1 transition">
-        <div class="text-saffron-600">
-          <svg viewBox="0 0 24 24" class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18v12H3z M3 10h18 M8 14h8"/></svg>
-        </div>
-        <h3 class="mt-4 font-display text-xl">Browse loan types</h3>
-        <p class="mt-2 text-sm text-navy/65">Indicative rates, max amounts, and typical approval times for every category.</p>
+        <span class="icon-badge bg-accent-50 text-accent-500">
+          <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3z M3 10h18 M8 14h8"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Browse loan types</h3>
+        <p class="mt-2 text-sm text-ink-500">Indicative rates, max amounts, and typical approval times for every category.</p>
       </a>
       <a href="/#lead-form" class="card group hover:-translate-y-1 transition">
-        <div class="text-saffron-600">
-          <svg viewBox="0 0 24 24" class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11c0 4-4 8-9 8a9 9 0 01-3-.5L4 20l1.5-5A8 8 0 013 11c0-4 4-8 9-8s9 4 9 8z"/></svg>
-        </div>
-        <h3 class="mt-4 font-display text-xl">Talk to a consultant</h3>
-        <p class="mt-2 text-sm text-navy/65">Free, no-obligation callback within 24 hours. We do the running around.</p>
+        <span class="icon-badge bg-success-50 text-success-500">
+          <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11c0 4-4 8-9 8a9 9 0 01-3-.5L4 20l1.5-5A8 8 0 013 11c0-4 4-8 9-8s9 4 9 8z"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Talk to a consultant</h3>
+        <p class="mt-2 text-sm text-ink-500">Free, no-obligation callback within 24 hours. We do the running around.</p>
       </a>
     </div>
   </div>

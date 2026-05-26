@@ -12,29 +12,29 @@ $whatsapp  = config('contact.whatsapp');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a2540">
+  <meta name="theme-color" content="#1e62d7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= asset('css/site.css') ?>">
   <script defer src="https://unpkg.com/alpinejs@3.13.0/dist/cdn.min.js"></script>
   <?php require __DIR__ . '/seo-meta.php'; ?>
 </head>
-<body class="min-h-screen flex flex-col bg-white selection:bg-saffron/30 selection:text-navy">
-<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-navy focus:text-white focus:px-3 focus:py-2 focus:rounded-lg">Skip to content</a>
+<body class="min-h-screen flex flex-col bg-white selection:bg-accent-500/25 selection:text-ink">
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-brand-500 focus:text-white focus:px-3 focus:py-2 focus:rounded-lg">Skip to content</a>
 
-<header class="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-navy/5"
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-ink/5"
         x-data="{ mobileOpen: false }">
-  <div class="container-page flex items-center justify-between h-16">
-    <a href="/" class="flex items-center gap-2 group">
-      <span class="relative inline-flex items-center justify-center w-9 h-9 rounded-xl bg-navy text-white">
+  <div class="container-page flex items-center justify-between h-16 lg:h-20">
+    <a href="/" class="flex items-center gap-2.5 group">
+      <span class="relative inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-card">
         <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5" aria-hidden="true">
-          <path d="M4 19V8l8-5 8 5v11" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-          <path d="M9 19v-6h6v6" stroke="#ff8a3d" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M3 17l5-5 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="8" r="2" fill="#ff6b35"/>
         </svg>
       </span>
-      <span class="font-display text-[1.35rem] font-semibold tracking-tight text-navy">
-        Loan<span class="text-saffron-600">Sathi</span>
+      <span class="font-display text-2xl font-extrabold tracking-tight text-ink leading-none">
+        Loan<span class="text-accent-500">Sathi</span>
       </span>
     </a>
 
@@ -47,27 +47,30 @@ $whatsapp  = config('contact.whatsapp');
     </nav>
 
     <div class="flex items-center gap-3">
-      <a href="tel:<?= e($phone) ?>" class="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-navy hover:text-saffron-600">
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5c0 9 7 16 16 16l2-4-4-2-2 2c-3-1-6-4-7-7l2-2-2-4-4-1Z"/></svg>
-        <?= e($phone_ui) ?>
+      <a href="tel:<?= e($phone) ?>" class="hidden md:inline-flex items-center gap-2 text-sm font-bold text-ink hover:text-brand-500 transition">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-success-50 text-success-600">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5c0 9 7 16 16 16l2-4-4-2-2 2c-3-1-6-4-7-7l2-2-2-4-4-1Z"/></svg>
+        </span>
+        <span class="nums"><?= e($phone_ui) ?></span>
       </a>
-      <a href="#lead-form" class="btn-primary text-sm !px-4 !py-2.5">Apply Now
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <a href="#lead-form" class="btn-primary text-sm !px-5 !py-2.5">
+        Apply Now
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <button @click="mobileOpen = !mobileOpen" class="lg:hidden p-2 -mr-2 text-navy" aria-label="Toggle menu">
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden p-2 -mr-2 text-ink" aria-label="Toggle menu">
         <svg x-show="!mobileOpen" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         <svg x-show="mobileOpen" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
   </div>
 
-  <div x-show="mobileOpen" x-cloak class="lg:hidden border-t border-navy/5 bg-white">
+  <div x-show="mobileOpen" x-cloak class="lg:hidden border-t border-ink/5 bg-white">
     <div class="container-page py-4 flex flex-col gap-1 text-sm">
-      <a href="/#tools" class="py-2.5 font-semibold text-navy">Tools</a>
-      <a href="/#loans" class="py-2.5 font-semibold text-navy">Loans</a>
-      <a href="/#how-it-works" class="py-2.5 font-semibold text-navy">How it works</a>
-      <a href="/#faq" class="py-2.5 font-semibold text-navy">FAQ</a>
-      <a href="/about" class="py-2.5 font-semibold text-navy">About</a>
+      <a href="/#tools" class="py-2.5 font-bold text-ink">Tools</a>
+      <a href="/#loans" class="py-2.5 font-bold text-ink">Loans</a>
+      <a href="/#how-it-works" class="py-2.5 font-bold text-ink">How it works</a>
+      <a href="/#faq" class="py-2.5 font-bold text-ink">FAQ</a>
+      <a href="/about" class="py-2.5 font-bold text-ink">About</a>
     </div>
   </div>
 </header>
