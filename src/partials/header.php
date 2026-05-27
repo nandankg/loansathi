@@ -17,7 +17,7 @@ $whatsapp  = config('contact.whatsapp');
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= asset('css/site.css') ?>">
-  <script defer src="<?= asset('js/tools.js?v=2') ?>"></script>
+  <script defer src="<?= asset('js/tools.js?v=3') ?>"></script>
   <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
   <?php require __DIR__ . '/seo-meta.php'; ?>
 </head>
@@ -35,7 +35,7 @@ $whatsapp  = config('contact.whatsapp');
         </svg>
       </span>
       <span class="font-display text-2xl font-extrabold tracking-tight text-ink leading-none">
-        Loan<span class="text-accent-500">Sathi</span>
+        Instant<span class="text-accent-500">PersonalLoan</span>
       </span>
     </a>
 

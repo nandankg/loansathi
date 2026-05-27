@@ -192,4 +192,191 @@
       }
     }, 0);
   });
+
+  function setText(root, selector, text) {
+    var el = root.querySelector(selector);
+    if (el) el.textContent = text;
+  }
+
+  function setupToolTabs() {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-tool-tab]'));
+    var panels = Array.prototype.slice.call(document.querySelectorAll('[data-tool-panel]'));
+    if (!tabs.length || !panels.length) return;
+
+    function activate(name) {
+      tabs.forEach(function (tab) {
+        tab.classList.toggle('active', tab.getAttribute('data-tool-tab') === name);
+      });
+      panels.forEach(function (panel) {
+        panel.style.display = panel.getAttribute('data-tool-panel') === name ? '' : 'none';
+      });
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        activate(tab.getAttribute('data-tool-tab'));
+      });
+    });
+
+    activate('emi');
+  }
+
+  function numberValue(root, field, fallback) {
+    var el = root.querySelector('[data-emi-field="' + field + '"], [data-elig-field="' + field + '"]');
+    var value = el ? parseFloat(el.value) : NaN;
+    return isFinite(value) ? value : fallback;
+  }
+
+  function syncFields(root, attr, field, value) {
+    Array.prototype.slice.call(root.querySelectorAll('[' + attr + '="' + field + '"]')).forEach(function (el) {
+      el.value = value;
+    });
+  }
+
+  function setupEmiFallback() {
+    var root = document.getElementById('emi-tool');
+    if (!root) return;
+    var calculate = root.querySelector('[data-emi-calculate]');
+    var loanType = root.querySelector('[data-emi-field="loanType"]');
+
+    function updateResult() {
+      var amount = numberValue(root, 'amount', 0);
+      var rate = numberValue(root, 'rate', 0);
+      var tenure = numberValue(root, 'tenure', 0);
+      var emi = Math.round(emiCore(amount, rate, tenure));
+      var totalPayment = Math.round(emi * tenure);
+      var totalInterest = Math.max(0, totalPayment - amount);
+      var principalPct = totalPayment > 0 ? Math.max(0, Math.min(100, (amount / totalPayment) * 100)) : 0;
+
+      setText(root, '[data-emi-result="emi"]', '₹' + formatINR(emi));
+      setText(root, '[data-emi-result="amount"]', formatINR(amount));
+      setText(root, '[data-emi-result="totalInterest"]', '₹' + formatINR(totalInterest));
+      setText(root, '[data-emi-result="totalPayment"]', '₹' + formatINR(totalPayment));
+      setText(root, '[data-emi-result="principalPct"]', principalPct.toFixed(0) + '%');
+      var circle = root.querySelector('[data-emi-circle]');
+      if (circle) circle.setAttribute('stroke-dashoffset', String(100 - principalPct));
+
+      window.__leadPrefill = loanType ? loanType.value : 'personal';
+      window.__leadAmount = amount;
+    }
+
+    Array.prototype.slice.call(root.querySelectorAll('[data-emi-field]')).forEach(function (el) {
+      el.addEventListener('input', function () {
+        var field = el.getAttribute('data-emi-field');
+        if (field !== 'loanType') syncFields(root, 'data-emi-field', field, el.value);
+      });
+      el.addEventListener('change', function () {
+        var field = el.getAttribute('data-emi-field');
+        if (field === 'loanType') {
+          syncFields(root, 'data-emi-field', 'amount', AMOUNT_DEFAULTS[el.value] || 500000);
+          syncFields(root, 'data-emi-field', 'rate', RATE_DEFAULTS[el.value] || 10.5);
+          syncFields(root, 'data-emi-field', 'tenure', TENURE_DEFAULTS[el.value] || 36);
+        }
+      });
+    });
+
+    if (calculate) calculate.addEventListener('click', updateResult);
+    updateResult();
+  }
+
+  function eligibilityResult(loanType, income, existingEmi, age, score) {
+    if (income <= 0) {
+      return { eligible: false, amount: 0, message: 'Enter your monthly income to see eligibility.' };
+    }
+    var amount = 0, eligible = false, message = '';
+    switch (loanType) {
+      case 'personal':
+        if (age < 21 || age > 60) return { eligible: false, amount: 0, message: 'Age must be 21-60 for personal loans.' };
+        if (score === 'below_650') return { eligible: false, amount: 0, message: 'Score below 650 typically disqualifies personal loans. Try gold or LAP instead.' };
+        amount = 24 * income - 12 * existingEmi;
+        eligible = amount > 0;
+        message = eligible ? 'Based on your income and EMI capacity. Final offer depends on credit history.' : 'Existing EMIs leave no repayment headroom.';
+        break;
+      case 'home': {
+        var maxEmi = income * 0.55 - existingEmi;
+        if (maxEmi <= 0) return { eligible: false, amount: 0, message: 'Existing EMIs leave no headroom for a home loan.' };
+        var r = 8.5 / 12 / 100, n = 240, pow = Math.pow(1 + r, n);
+        amount = maxEmi * (pow - 1) / (r * pow);
+        eligible = true;
+        message = 'Assumes 8.5% over 20 years. Longer tenure increases the eligible amount.';
+        break;
+      }
+      case 'business':
+        amount = income * 12 * 0.30;
+        eligible = true;
+        message = 'Indicative, based on 30% of estimated annual turnover.';
+        break;
+      case 'gold':
+        amount = 450000;
+        eligible = true;
+        message = 'Gold loans depend on weight, value, and lender LTV.';
+        break;
+      case 'lap':
+        amount = 6500000;
+        eligible = true;
+        message = 'Loan Against Property typically goes up to 65% of property value.';
+        break;
+      case 'education':
+        amount = score === 'below_650' ? 750000 : 5000000;
+        eligible = true;
+        message = 'Without collateral, capped near ₹7.5L. With collateral or co-applicant, higher limits may be possible.';
+        break;
+      case 'vehicle':
+        amount = 680000;
+        eligible = true;
+        message = 'Vehicle loans can cover up to about 85% of on-road price.';
+        break;
+      default:
+        message = 'Select a loan type to see your eligibility.';
+    }
+    return { eligible: eligible, amount: Math.round(Math.max(0, amount)), message: message };
+  }
+
+  function setupEligibilityFallback() {
+    var root = document.getElementById('eligibility-tool');
+    if (!root) return;
+    var calculate = root.querySelector('[data-elig-calculate]');
+    var selectedLoan = 'personal';
+
+    function markSelected() {
+      Array.prototype.slice.call(root.querySelectorAll('[data-elig-loan]')).forEach(function (btn) {
+        var active = btn.getAttribute('data-elig-loan') === selectedLoan;
+        btn.classList.toggle('!bg-brand-500', active);
+        btn.classList.toggle('!text-white', active);
+        btn.classList.toggle('!border-brand-500', active);
+      });
+    }
+
+    function updateResult() {
+      var income = numberValue(root, 'income', 0);
+      var existingEmi = numberValue(root, 'existingEmi', 0);
+      var age = numberValue(root, 'age', 30);
+      var scoreEl = root.querySelector('[data-elig-field="score"]');
+      var score = scoreEl ? scoreEl.value : 'good';
+      var result = eligibilityResult(selectedLoan, income, existingEmi, age, score);
+
+      setText(root, '[data-elig-result="amount"]', result.eligible ? formatAbbrev(result.amount) : '—');
+      setText(root, '[data-elig-result="message"]', result.message);
+      window.__leadPrefill = selectedLoan;
+      window.__leadAmount = result.amount;
+      markSelected();
+    }
+
+    Array.prototype.slice.call(root.querySelectorAll('[data-elig-loan]')).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        selectedLoan = btn.getAttribute('data-elig-loan');
+        markSelected();
+      });
+    });
+
+    if (calculate) calculate.addEventListener('click', updateResult);
+    markSelected();
+    updateResult();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    setupToolTabs();
+    setupEmiFallback();
+    setupEligibilityFallback();
+  });
 })();

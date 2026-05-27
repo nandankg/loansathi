@@ -1,5 +1,5 @@
 <?php
-$page_title = 'LoanSathi — Compare loans, calculate EMI, get matched in 24 hours';
+$page_title = 'InstantPersonalLoan — Compare loans, calculate EMI, get matched in 24 hours';
 $page_description = 'India\'s smart loan companion. Compare personal, home, business, gold and other loans from 20+ lenders. Instant EMI calculator and eligibility checker. Free expert guidance, no fees from you.';
 require __DIR__ . '/../partials/header.php';
 ?>
@@ -195,26 +195,34 @@ require __DIR__ . '/../partials/header.php';
     <!-- Tab nav -->
     <div class="mt-10 flex justify-center">
       <div class="inline-flex flex-wrap gap-1 p-1.5 rounded-full bg-surface-100 border border-ink/5 shadow-card">
-        <button type="button" @click="tab='emi'" class="tool-tab" :class="{ 'active': tab==='emi' }">
+        <button type="button" data-tool-tab="emi" @click="tab='emi'" class="tool-tab active" :class="{ 'active': tab==='emi' }">
           EMI Calculator
         </button>
-        <button type="button" @click="tab='eligibility'" class="tool-tab" :class="{ 'active': tab==='eligibility' }">
+        <button type="button" data-tool-tab="eligibility" @click="tab='eligibility'" class="tool-tab" :class="{ 'active': tab==='eligibility' }">
           Eligibility
         </button>
-        <button type="button" @click="tab='compare'" class="tool-tab" :class="{ 'active': tab==='compare' }">
+        <button type="button" data-tool-tab="compare" @click="tab='compare'" class="tool-tab" :class="{ 'active': tab==='compare' }">
           Compare
         </button>
       </div>
     </div>
 
     <!-- ========== EMI CALCULATOR ========== -->
-    <div x-show="tab==='emi'" x-cloak x-transition class="mt-10" x-data="emiCalc()">
+    <div id="emi-tool" data-tool-panel="emi" x-show="tab==='emi'" x-cloak x-transition class="mt-10" x-data="emiCalc()">
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div class="card lg:col-span-3">
+          <div class="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span class="eyebrow">EMI Calculator</span>
+              <h3 class="mt-3 font-display text-3xl font-extrabold text-ink">Plan your monthly payment</h3>
+              <p class="mt-2 text-sm text-ink-500">Enter amount, rate, and tenure, then calculate your EMI instantly.</p>
+            </div>
+            <span class="chip-brand w-fit">Instant estimate</span>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Loan type</label>
-              <select x-model="loanType" @change="syncDefaults" class="input-field mt-2 font-semibold">
+              <select data-emi-field="loanType" x-model="loanType" @change="syncDefaults" class="input-field mt-2 font-semibold">
                 <option value="personal">Personal Loan</option>
                 <option value="home">Home Loan</option>
                 <option value="business">Business Loan</option>
@@ -228,23 +236,30 @@ require __DIR__ . '/../partials/header.php';
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Loan amount</label>
               <div class="mt-2 relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400 font-bold">₹</span>
-                <input type="number" x-model.number="amount" class="input-field pl-8 nums font-semibold" min="50000" max="50000000" step="10000">
+                <input type="number" data-emi-field="amount" x-model.number="amount" class="input-field pl-8 nums font-semibold" min="50000" max="50000000" step="10000" value="500000">
               </div>
-              <input type="range" min="50000" max="20000000" step="50000" x-model.number="amount" class="range-brand w-full mt-3">
+              <input type="range" data-emi-field="amount" min="50000" max="20000000" step="50000" x-model.number="amount" class="range-brand w-full mt-3" value="500000">
             </div>
             <div>
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Interest rate</label>
               <div class="mt-2 relative">
-                <input type="number" step="0.1" x-model.number="rate" class="input-field pr-10 nums font-semibold">
+                <input type="number" data-emi-field="rate" step="0.1" x-model.number="rate" class="input-field pr-10 nums font-semibold" value="10.5">
                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-ink-400 font-bold">%</span>
               </div>
-              <input type="range" min="5" max="24" step="0.1" x-model.number="rate" class="range-brand w-full mt-3">
+              <input type="range" data-emi-field="rate" min="5" max="24" step="0.1" x-model.number="rate" class="range-brand w-full mt-3" value="10.5">
             </div>
             <div>
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Tenure (months)</label>
-              <input type="number" x-model.number="tenure" class="input-field mt-2 nums font-semibold" min="3" max="360">
-              <input type="range" min="3" max="360" step="3" x-model.number="tenure" class="range-brand w-full mt-3">
+              <input type="number" data-emi-field="tenure" x-model.number="tenure" class="input-field mt-2 nums font-semibold" min="3" max="360" value="36">
+              <input type="range" data-emi-field="tenure" min="3" max="360" step="3" x-model.number="tenure" class="range-brand w-full mt-3" value="36">
             </div>
+          </div>
+          <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:items-center">
+            <button type="button" data-emi-calculate class="btn-primary w-full sm:w-auto">
+              Calculate EMI
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <p class="text-xs text-ink-500">Change any value and press Calculate to refresh the result.</p>
           </div>
         </div>
 
@@ -253,17 +268,17 @@ require __DIR__ . '/../partials/header.php';
           <div class="absolute top-4 right-4 w-16 h-16 text-white/15 dotted"></div>
           <div class="relative">
             <div class="text-[11px] uppercase tracking-[0.2em] text-white/70 font-extrabold">Your monthly EMI</div>
-            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" x-text="'₹' + formatNum(emi)">₹0</div>
-            <div class="mt-1 text-sm text-white/60">on a ₹<span class="nums" x-text="formatNum(amount)">0</span> loan</div>
+            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" data-emi-result="emi" x-text="'₹' + formatNum(emi)">₹15,934</div>
+            <div class="mt-1 text-sm text-white/60">on a ₹<span class="nums" data-emi-result="amount" x-text="formatNum(amount)">5,00,000</span> loan</div>
 
             <div class="mt-7 grid grid-cols-2 gap-3 text-sm">
               <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
                 <div class="text-white/70 text-[10px] uppercase tracking-wider font-extrabold">Total interest</div>
-                <div class="font-mono text-xl mt-1 nums font-extrabold" x-text="'₹' + formatNum(totalInterest)">₹0</div>
+                <div class="font-mono text-xl mt-1 nums font-extrabold" data-emi-result="totalInterest" x-text="'₹' + formatNum(totalInterest)">₹73,624</div>
               </div>
               <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
                 <div class="text-white/70 text-[10px] uppercase tracking-wider font-extrabold">Total payment</div>
-                <div class="font-mono text-xl mt-1 nums font-extrabold" x-text="'₹' + formatNum(totalPayment)">₹0</div>
+                <div class="font-mono text-xl mt-1 nums font-extrabold" data-emi-result="totalPayment" x-text="'₹' + formatNum(totalPayment)">₹5,73,624</div>
               </div>
             </div>
 
@@ -271,11 +286,11 @@ require __DIR__ . '/../partials/header.php';
               <div class="relative w-20 h-20">
                 <svg viewBox="0 0 36 36" class="w-20 h-20 -rotate-90">
                   <circle cx="18" cy="18" r="14.4" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3.5"></circle>
-                  <circle cx="18" cy="18" r="14.4" fill="none" stroke="#ff6b35" stroke-width="3.5"
+                  <circle data-emi-circle cx="18" cy="18" r="14.4" fill="none" stroke="#ff6b35" stroke-width="3.5"
                           stroke-dasharray="100" :stroke-dashoffset="100 - principalPct" pathLength="100"
                           stroke-linecap="round" style="transition: stroke-dashoffset 400ms ease"></circle>
                 </svg>
-                <div class="absolute inset-0 flex items-center justify-center text-xs font-extrabold nums" x-text="principalPct.toFixed(0) + '%'">0%</div>
+                <div class="absolute inset-0 flex items-center justify-center text-xs font-extrabold nums" data-emi-result="principalPct" x-text="principalPct.toFixed(0) + '%'">87%</div>
               </div>
               <div class="text-xs leading-relaxed text-white/85 font-semibold">
                 <div><span class="inline-block w-2 h-2 rounded-full bg-accent-500 mr-1.5"></span>Principal</div>
@@ -293,15 +308,23 @@ require __DIR__ . '/../partials/header.php';
     </div>
 
     <!-- ========== ELIGIBILITY ========== -->
-    <div x-show="tab==='eligibility'" x-cloak x-transition class="mt-10" x-data="eligibilityCheck()">
+    <div id="eligibility-tool" data-tool-panel="eligibility" x-show="tab==='eligibility'" x-cloak x-transition class="mt-10" x-data="eligibilityCheck()">
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div class="card lg:col-span-3">
+          <div class="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span class="eyebrow">Eligibility Checker</span>
+              <h3 class="mt-3 font-display text-3xl font-extrabold text-ink">Check how much you may qualify for</h3>
+              <p class="mt-2 text-sm text-ink-500">Add your income, existing EMI, age, and credit range to estimate eligibility.</p>
+            </div>
+            <span class="chip-success w-fit">No signup needed</span>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="sm:col-span-2">
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">I want a</label>
               <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <?php foreach (['personal','home','business','gold','lap','education','vehicle'] as $t): ?>
-                  <button type="button" @click="loanType='<?= $t ?>'"
+                  <button type="button" data-elig-loan="<?= e($t) ?>" @click="loanType='<?= $t ?>'"
                           class="text-xs font-extrabold py-3 px-3 rounded-xl border-2 capitalize transition bg-white text-ink border-ink/10 hover:border-brand-500"
                           :class="loanType==='<?= $t ?>' ? '!bg-brand-500 !text-white !border-brand-500 shadow-card' : ''">
                     <?= $t === 'lap' ? 'LAP' : $t ?>
@@ -313,23 +336,23 @@ require __DIR__ . '/../partials/header.php';
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Monthly income</label>
               <div class="mt-2 relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400 font-bold">₹</span>
-                <input type="number" x-model.number="income" class="input-field pl-8 nums font-semibold" min="0">
+                <input type="number" data-elig-field="income" x-model.number="income" class="input-field pl-8 nums font-semibold" min="0" value="60000">
               </div>
             </div>
             <div>
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Existing EMIs</label>
               <div class="mt-2 relative">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400 font-bold">₹</span>
-                <input type="number" x-model.number="existingEmi" class="input-field pl-8 nums font-semibold" min="0">
+                <input type="number" data-elig-field="existingEmi" x-model.number="existingEmi" class="input-field pl-8 nums font-semibold" min="0" value="0">
               </div>
             </div>
             <div>
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Age</label>
-              <input type="number" x-model.number="age" class="input-field mt-2 nums font-semibold" min="18" max="80">
+              <input type="number" data-elig-field="age" x-model.number="age" class="input-field mt-2 nums font-semibold" min="18" max="80" value="30">
             </div>
             <div>
               <label class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Credit score</label>
-              <select x-model="score" class="input-field mt-2 font-semibold">
+              <select data-elig-field="score" x-model="score" class="input-field mt-2 font-semibold">
                 <option value="excellent">750+ (Excellent)</option>
                 <option value="good">700–749 (Good)</option>
                 <option value="fair">650–699 (Fair)</option>
@@ -337,14 +360,21 @@ require __DIR__ . '/../partials/header.php';
               </select>
             </div>
           </div>
+          <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:items-center">
+            <button type="button" data-elig-calculate class="btn-success w-full sm:w-auto">
+              Check Eligibility
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <p class="text-xs text-ink-500">This is an estimate. Final eligibility depends on lender checks.</p>
+          </div>
         </div>
 
         <div class="lg:col-span-2 bg-gradient-to-br from-brand-500 to-brand-700 text-white rounded-3xl p-7 sm:p-8 relative overflow-hidden">
           <div class="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-accent-500/25 blur-2xl"></div>
           <div class="relative">
             <div class="text-[11px] uppercase tracking-[0.2em] text-white/70 font-extrabold">You're eligible for up to</div>
-            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" x-text="result.eligible ? '₹' + formatNum(result.amount) : '—'">₹0</div>
-            <p class="mt-3 text-sm text-white/80 leading-relaxed" x-text="result.message">Enter your details to see eligibility.</p>
+            <div class="mt-3 font-mono text-5xl sm:text-6xl font-extrabold tracking-tight nums" data-elig-result="amount" x-text="result.eligible ? '₹' + formatNum(result.amount) : '—'">₹14.4 L</div>
+            <p class="mt-3 text-sm text-white/80 leading-relaxed" data-elig-result="message" x-text="result.message">Based on your income and EMI capacity. Final offer depends on credit history.</p>
             <a href="#lead-form" x-show="result.eligible" @click="prefillLeadForm" class="mt-7 btn-accent w-full !justify-between">
               Get matched with a lender
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -356,7 +386,7 @@ require __DIR__ . '/../partials/header.php';
     </div>
 
     <!-- ========== COMPARE ========== -->
-    <div x-show="tab==='compare'" x-cloak x-transition class="mt-10">
+    <div data-tool-panel="compare" x-show="tab==='compare'" x-cloak x-transition class="mt-10">
       <div class="card overflow-hidden p-0">
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
