@@ -20,7 +20,9 @@ RewriteRule ^ index.php [QSA,L]
   # constructor, which requires 'unsafe-eval'. Without it the CSP silently blocks
   # every x-show / x-data / @click / @submit, so the mobile menu, lead form, EMI
   # calculator, and FAQ accordions all stop working on hosts that enforce CSP.
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self';"
+  # connect-src must list the GA4 collection endpoints or gtag loads but sends
+  # no data (the requests are silently blocked).
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-ancestors 'self';"
 </IfModule>
 
 <IfModule mod_headers.c>

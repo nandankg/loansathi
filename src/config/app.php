@@ -42,6 +42,8 @@ return [
   ],
   'gsc_verification'  => $env('GSC_VERIFICATION',  ''),
   'bing_verification' => $env('BING_VERIFICATION', ''),
+  // GA4 Measurement ID (G-XXXXXXXXXX). Empty = analytics disabled (e.g. local dev).
+  'ga4_id'            => $env('GA4_MEASUREMENT_ID', ''),
   'setup_key'         => $env('SETUP_KEY',         ''),
   'eligibility' => [
     'gold_rate_per_gram'   => 6000,

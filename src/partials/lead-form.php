@@ -90,6 +90,7 @@ function leadForm(opts){
         if (res.ok && data.ok) {
           this.status = 'success';
           if (window.dataLayer) window.dataLayer.push({event:'lead_submit', loan_type:this.form.loan_type});
+          if (window.gaEvent) window.gaEvent('generate_lead', {loan_type:this.form.loan_type});
         } else {
           this.errors = data.errors || {};
           this.status = res.status === 429 ? 'error' : 'idle';

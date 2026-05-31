@@ -20,6 +20,7 @@ $whatsapp  = config('contact.whatsapp');
   <script defer src="<?= asset('js/tools.js?v=3') ?>"></script>
   <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
   <?php require __DIR__ . '/seo-meta.php'; ?>
+  <?php require __DIR__ . '/analytics.php'; ?>
 </head>
 <body class="min-h-screen flex flex-col bg-white selection:bg-accent-500/25 selection:text-ink">
 <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-brand-500 focus:text-white focus:px-3 focus:py-2 focus:rounded-lg">Skip to content</a>
