@@ -22,6 +22,15 @@ return [
     'email'         => $env('CONTACT_EMAIL',         'hello@loansathi.in'),
     'lead_inbox'    => $env('CONTACT_LEAD_INBOX',    'leads@loansathi.in'),
   ],
+  // Legal/identity details shown on the privacy, terms, about, and contact
+  // pages. Defaults intentionally read "FILL-IN: ..." so an unset value is
+  // obvious on the live site — set the LEGAL_* vars in .env to replace them.
+  'legal' => [
+    'entity'            => $env('LEGAL_ENTITY',            'FILL-IN: Registered Legal Entity Name'),
+    'address'           => $env('LEGAL_ADDRESS',           'FILL-IN: Full Registered Address, City, State, PIN'),
+    'grievance_officer' => $env('LEGAL_GRIEVANCE_OFFICER', 'FILL-IN: Grievance Officer Name'),
+    'jurisdiction'      => $env('LEGAL_JURISDICTION',      'FILL-IN: City, State'),
+  ],
   'smtp' => [
     'host'          => $env('SMTP_HOST',   'localhost'),
     'port'          => (int)$env('SMTP_PORT', 587),

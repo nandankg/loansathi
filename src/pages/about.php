@@ -6,6 +6,8 @@ require __DIR__ . '/../partials/header.php';
 
 $phone   = config('contact.phone_display');
 $email   = config('contact.email');
+$entity  = config('legal.entity');
+$address = config('legal.address');
 ?>
 
 <section class="bg-gradient-to-br from-surface-100 via-white to-surface-100 relative overflow-hidden">
@@ -67,11 +69,11 @@ $email   = config('contact.email');
       <dl class="mt-4 space-y-3 text-sm">
         <div>
           <dt class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Operated by</dt>
-          <dd class="mt-0.5 text-ink-700"><strong>FILL-IN: Registered Legal Entity Name</strong></dd>
+          <dd class="mt-0.5 text-ink-700"><strong><?= e($entity) ?></strong></dd>
         </div>
         <div>
           <dt class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Registered address</dt>
-          <dd class="mt-0.5 text-ink-700">FILL-IN: Full Registered Address, City, State, PIN</dd>
+          <dd class="mt-0.5 text-ink-700"><?= e($address) ?></dd>
         </div>
         <div>
           <dt class="text-[11px] uppercase tracking-wider font-extrabold text-ink-500">Phone</dt>

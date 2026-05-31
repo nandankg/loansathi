@@ -4,8 +4,9 @@ $page_description = 'The terms governing your use of LoanSathi, an independent l
 $page_robots = 'index,follow';
 require __DIR__ . '/../partials/header.php';
 
-$email   = config('contact.email');
-$updated = 'May 31, 2026';
+$email        = config('contact.email');
+$jurisdiction = config('legal.jurisdiction');
+$updated      = 'May 31, 2026';
 ?>
 
 <section class="bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 text-white relative overflow-hidden">
@@ -101,7 +102,7 @@ $updated = 'May 31, 2026';
       <h2 class="font-display text-2xl font-extrabold text-ink">8. Governing law</h2>
       <p class="mt-3">
         These Terms are governed by the laws of India, and the courts at
-        <strong>FILL-IN: City, State</strong> shall have exclusive jurisdiction.
+        <strong><?= e($jurisdiction) ?></strong> shall have exclusive jurisdiction.
       </p>
     </section>
 

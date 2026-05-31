@@ -4,10 +4,13 @@ $page_description = 'Get in touch with LoanSathi. Phone, email, WhatsApp, and ou
 $page_robots = 'index,follow';
 require __DIR__ . '/../partials/header.php';
 
-$phone    = config('contact.phone');
-$phone_ui = config('contact.phone_display');
-$email    = config('contact.email');
-$whatsapp = config('contact.whatsapp');
+$phone     = config('contact.phone');
+$phone_ui  = config('contact.phone_display');
+$email     = config('contact.email');
+$whatsapp  = config('contact.whatsapp');
+$entity    = config('legal.entity');
+$address   = config('legal.address');
+$grievance = config('legal.grievance_officer');
 ?>
 
 <section class="bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 text-white relative overflow-hidden">
@@ -54,13 +57,12 @@ $whatsapp = config('contact.whatsapp');
     <div class="card bg-surface-100">
       <h2 class="font-display text-xl font-extrabold text-ink">Registered office</h2>
       <p class="mt-3 text-ink-700 leading-relaxed">
-        <strong>FILL-IN: Registered Legal Entity Name</strong><br>
-        FILL-IN: Building / Street<br>
-        FILL-IN: City, State – PIN<br>
+        <strong><?= e($entity) ?></strong><br>
+        <?= e($address) ?><br>
         India
       </p>
       <p class="mt-4 text-sm text-ink-500">
-        Grievance Officer: <strong>FILL-IN: Name</strong> ·
+        Grievance Officer: <strong><?= e($grievance) ?></strong> ·
         <a href="mailto:<?= e($email) ?>" class="text-brand-500 font-semibold"><?= e($email) ?></a>
       </p>
     </div>

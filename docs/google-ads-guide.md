@@ -78,11 +78,15 @@ built into LoanSathi (✔), or still need your input (⬜ FILL-IN):
 - [x] Contact page (`/contact`) — phone, email, registered address
 - [x] Footer disclosure on every page
 - [x] Cost-transparency block (APR range, tenure, representative example)
-- [ ] **FILL-IN:** registered legal entity name (privacy, terms, about, contact)
-- [ ] **FILL-IN:** full registered office address
-- [ ] **FILL-IN:** grievance officer name
-- [ ] **FILL-IN:** real phone / WhatsApp / email in `.env` (replace `+91XXXXXXXXXX`)
-- [ ] **FILL-IN:** governing-law city/state in Terms
+- [ ] **`.env`:** `LEGAL_ENTITY` — registered legal entity name
+- [ ] **`.env`:** `LEGAL_ADDRESS` — full registered office address
+- [ ] **`.env`:** `LEGAL_GRIEVANCE_OFFICER` — grievance officer name
+- [ ] **`.env`:** `LEGAL_JURISDICTION` — governing-law city/state (Terms)
+- [ ] **`.env`:** real phone / WhatsApp / email (`CONTACT_*`, replace `+91XXXXXXXXXX`)
+
+  > All legal/identity text now comes from `.env` (see `.env.example`). Set
+  > these once on the server — no PHP editing needed. Values with spaces must
+  > be wrapped in double quotes.
 
 **Technical / trust signals**
 - [ ] Site served over **HTTPS** with a valid SSL certificate (required).

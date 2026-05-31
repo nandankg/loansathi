@@ -4,9 +4,12 @@ $page_description = 'How LoanSathi collects, uses, shares, and protects your per
 $page_robots = 'index,follow';
 require __DIR__ . '/../partials/header.php';
 
-$email   = config('contact.email');
-$phone   = config('contact.phone_display');
-$updated = 'May 31, 2026';
+$email     = config('contact.email');
+$phone     = config('contact.phone_display');
+$entity    = config('legal.entity');
+$address   = config('legal.address');
+$grievance = config('legal.grievance_officer');
+$updated   = 'May 31, 2026';
 ?>
 
 <section class="bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 text-white relative overflow-hidden">
@@ -34,8 +37,8 @@ $updated = 'May 31, 2026';
       <h2 class="font-display text-2xl font-extrabold text-ink">1. Who we are</h2>
       <p class="mt-3">
         This website ("LoanSathi", "we", "us") is operated by
-        <strong>FILL-IN: Registered Legal Entity Name</strong>, having its
-        registered office at <strong>FILL-IN: Full Registered Address</strong>.
+        <strong><?= e($entity) ?></strong>, having its
+        registered office at <strong><?= e($address) ?></strong>.
         For any privacy question you can reach us at
         <a href="mailto:<?= e($email) ?>" class="text-brand-500 font-semibold"><?= e($email) ?></a>
         or <?= e($phone) ?>.
@@ -107,7 +110,7 @@ $updated = 'May 31, 2026';
     <section>
       <h2 class="font-display text-2xl font-extrabold text-ink">8. Grievance officer</h2>
       <p class="mt-3">
-        Grievance Officer: <strong>FILL-IN: Name</strong> ·
+        Grievance Officer: <strong><?= e($grievance) ?></strong> ·
         <a href="mailto:<?= e($email) ?>" class="text-brand-500 font-semibold"><?= e($email) ?></a> ·
         <?= e($phone) ?>. We aim to acknowledge complaints within 48 hours.
       </p>
