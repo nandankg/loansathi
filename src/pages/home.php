@@ -1,5 +1,5 @@
 <?php
-$page_title = 'InstantPersonalLoan — Compare loans, calculate EMI, get matched in 24 hours';
+$page_title = 'LoanSathi — Compare loans, calculate EMI, get matched in 24 hours';
 $page_description = 'India\'s smart loan companion. Compare personal, home, business, gold and other loans from 20+ lenders. Instant EMI calculator and eligibility checker. Free expert guidance, no fees from you.';
 require __DIR__ . '/../partials/header.php';
 ?>

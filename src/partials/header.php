@@ -35,7 +35,7 @@ $whatsapp  = config('contact.whatsapp');
         </svg>
       </span>
       <span class="font-display text-2xl font-extrabold tracking-tight text-ink leading-none">
-        Instant<span class="text-accent-500">PersonalLoan</span>
+        Loan<span class="text-accent-500">Sathi</span>
       </span>
     </a>
 
@@ -54,10 +54,19 @@ $whatsapp  = config('contact.whatsapp');
         </span>
         <span class="nums"><?= e($phone_ui) ?></span>
       </a>
+<?php // On ad landing pages ($page_ad_safe) the CTA must not solicit a loan
+            // application, so it points to the free tools instead of the lead form. ?>
+      <?php if (!empty($page_ad_safe)): ?>
+      <a href="/emi-calculator" class="btn-primary text-sm !px-5 !py-2.5">
+        Free Tools
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <?php else: ?>
       <a href="#lead-form" class="btn-primary text-sm !px-5 !py-2.5">
         Apply Now
         <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
+      <?php endif; ?>
       <button @click="mobileOpen = !mobileOpen" class="lg:hidden p-2 -mr-2 text-ink" aria-label="Toggle menu">
         <svg x-show="!mobileOpen" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         <svg x-show="mobileOpen" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M6 6l12 12M18 6L6 18"/></svg>

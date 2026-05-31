@@ -32,8 +32,11 @@ $email      = config('contact.email');
     <div>
       <div class="text-white font-extrabold mb-4 uppercase tracking-wider text-xs">Loans</div>
       <ul class="space-y-2.5 text-white/70">
+        <?php // Point to the live comparison page rather than the not-yet-built
+              // per-loan-type pages, so no "coming soon" page is reachable from
+              // an ad landing page footer. ?>
         <?php foreach ($loan_types as $slug => $label): ?>
-          <li><a class="hover:text-white transition" href="/<?= e($slug === 'lap' ? 'loan-against-property' : $slug . '-loan') ?>"><?= e($label) ?></a></li>
+          <li><a class="hover:text-white transition" href="/loan-comparison"><?= e($label) ?></a></li>
         <?php endforeach; ?>
       </ul>
     </div>

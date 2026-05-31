@@ -6,6 +6,11 @@ function routes_table(): array {
         '/'                       => 'home',
         '/submit-lead'            => 'handlers/submit-lead',
         '/thank-you'              => 'thank-you',
+        '/admin'                  => 'admin/leads',
+        '/admin/login'            => 'admin/login',
+        '/admin/logout'           => 'admin/logout',
+        '/admin/leads'            => 'admin/leads',
+        '/admin/leads/{id}'       => 'admin/lead-detail',
         // Loan landings (Plan 2 — currently stubbed to /coming-soon page)
         '/personal-loan'          => $stub,
         '/home-loan'              => $stub,
@@ -14,18 +19,18 @@ function routes_table(): array {
         '/loan-against-property'  => $stub,
         '/education-loan'         => $stub,
         '/vehicle-loan'           => $stub,
-        // Tools (Plan 3 — interactive versions already on homepage)
-        '/emi-calculator'         => $stub,
-        '/eligibility-checker'    => $stub,
-        '/loan-comparison'        => $stub,
-        '/application-guide'      => $stub,
-        // Static pages (Plan 2)
-        '/about'                  => $stub,
-        '/contact'                => $stub,
+        // Education landing pages (ad destinations — no loan solicitation)
+        '/emi-calculator'         => 'emi-calculator',
+        '/eligibility-checker'    => 'eligibility-checker',
+        '/loan-comparison'        => 'loan-comparison',
+        '/application-guide'      => 'application-guide',
+        // Static pages
+        '/about'                  => 'about',
+        '/contact'                => 'contact',
         '/blog'                   => $stub,
-        '/privacy-policy'         => $stub,
-        '/terms-of-service'       => $stub,
-        '/disclaimer'             => $stub,
+        '/privacy-policy'         => 'privacy-policy',
+        '/terms-of-service'       => 'terms-of-service',
+        '/disclaimer'             => 'disclaimer',
     ];
 }
 
