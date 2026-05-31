@@ -26,6 +26,12 @@ if (!function_exists('e')) {
 if (!function_exists('base_url')) {
     function base_url(string $path = ''): string {
         $base = rtrim(config('base_url'), '/');
+        // Guard against a scheme-less BASE_URL (e.g. "example.com/") in .env. Without
+        // a scheme the browser treats asset URLs as relative and doubles the domain
+        // (https://example.com/example.com/assets/...), so force one.
+        if ($base !== '' && !preg_match('#^https?://#i', $base)) {
+            $base = 'https://' . ltrim($base, '/');
+        }
         return $base . '/' . ltrim($path, '/');
     }
 }
@@ -54,8 +60,12 @@ if (!function_exists('json_response')) {
 
 if (!function_exists('client_ip')) {
     function client_ip(): string {
-        return $_SERVER['HTTP_X_FORWARDED_FOR']
+        $raw = $_SERVER['HTTP_CF_CONNECTING_IP']
+            ?? $_SERVER['HTTP_X_REAL_IP']
+            ?? $_SERVER['HTTP_X_FORWARDED_FOR']
             ?? $_SERVER['REMOTE_ADDR']
             ?? '0.0.0.0';
+        $ip = trim(explode(',', (string)$raw)[0]);
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
     }
 }

@@ -1,20 +1,18 @@
 <?php
 // One-shot deployment helper. Hit this URL in your browser exactly once after
-// uploading files and configuring src/config/db.php + .env, then DELETE THIS FILE.
+// uploading files and configuring .env, then DELETE THIS FILE.
 //
 // Protected by SETUP_KEY (set in .env). The key must match a query parameter:
 //   https://yourdomain/setup.php?key=YOUR_SETUP_KEY
 //
 // Also refuses to run if an admin user already exists, so even if you forget
-// to delete it, it can't be replayed against a configured site.
+// to delete it, it cannot be replayed against a configured site.
 
 declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../src/lib/schema.php';
 
-$root = dirname(__DIR__);
-
-// 1) Refuse without a configured key
 $expectedKey = config('setup_key');
 if ($expectedKey === '' || $expectedKey === null) {
     http_response_code(503);
@@ -26,16 +24,6 @@ if (($_GET['key'] ?? '') !== $expectedKey) {
     exit('Forbidden.');
 }
 
-// 2) Ensure DB config exists
-$dbCfgPath = $root . '/src/config/db.php';
-if (!file_exists($dbCfgPath)) {
-    http_response_code(503);
-    exit('Missing src/config/db.php. Copy db.php.example, fill in your Hostinger DB credentials, then reload this page.');
-}
-
-require __DIR__ . '/../src/lib/db.php';
-
-// 3) Refuse if an admin already exists (one-shot guard)
 try {
     $hasAdmin = false;
     $tables = db()->query("SHOW TABLES LIKE 'admin_users'")->fetchAll();
@@ -43,18 +31,17 @@ try {
         $hasAdmin = (int)db()->query("SELECT COUNT(*) FROM admin_users")->fetchColumn() > 0;
     }
 } catch (Throwable $e) {
-    // DB might be empty / missing — fine, we'll create it below
+    // The database may be empty before setup runs.
     $hasAdmin = false;
 }
 
-// Show install form (GET) / process (POST)
 $step = $_SERVER['REQUEST_METHOD'] === 'POST' ? 'install' : ($hasAdmin ? 'done' : 'form');
 
 ?><!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>LoanSathi — Setup</title>
+<title>LoanSathi - Setup</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   *{box-sizing:border-box}
@@ -75,8 +62,8 @@ $step = $_SERVER['REQUEST_METHOD'] === 'POST' ? 'install' : ($hasAdmin ? 'done' 
 </head>
 <body>
 
-<h1>LoanSathi — Setup</h1>
-<p class="lead">One-shot deployment installer. Creates DB schema + first admin user.</p>
+<h1>LoanSathi - Setup</h1>
+<p class="lead">One-shot deployment installer. Creates DB schema and first admin user.</p>
 
 <?php if ($step === 'done'): ?>
   <div class="ok">
@@ -95,92 +82,10 @@ $step = $_SERVER['REQUEST_METHOD'] === 'POST' ? 'install' : ($hasAdmin ? 'done' 
 
   if (empty($errors)) {
       try {
-          // Create the database if the user gave permission; otherwise use whatever's configured
-          $cfg = require $dbCfgPath;
-          try {
-              $rootPdo = new PDO(
-                  "mysql:host={$cfg['host']};port={$cfg['port']};charset={$cfg['charset']}",
-                  $cfg['username'], $cfg['password'],
-                  [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-              );
-              $rootPdo->exec("CREATE DATABASE IF NOT EXISTS `{$cfg['database']}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-          } catch (Throwable $e) {
-              // Hostinger DB users usually can't CREATE DATABASE — but the DB was created via hPanel anyway.
-          }
-
+          create_database_if_possible(db_config());
           $pdo = db();
-          $schema = <<<SQL
-CREATE TABLE IF NOT EXISTS leads (
-  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(120) NOT NULL,
-  phone VARCHAR(20) NOT NULL,
-  email VARCHAR(180),
-  loan_type VARCHAR(40) NOT NULL,
-  loan_amount DECIMAL(14,2),
-  city VARCHAR(80),
-  monthly_income DECIMAL(12,2),
-  employment_type VARCHAR(40),
-  credit_score_range VARCHAR(20),
-  message TEXT,
-  source_page VARCHAR(255),
-  source_form VARCHAR(40),
-  utm_source VARCHAR(80),
-  utm_medium VARCHAR(80),
-  utm_campaign VARCHAR(120),
-  ip_address VARCHAR(45),
-  user_agent VARCHAR(255),
-  status ENUM('new','contacted','qualified','disbursed','rejected','spam') DEFAULT 'new',
-  admin_notes TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_status (status),
-  INDEX idx_created (created_at),
-  INDEX idx_loan_type (loan_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+          apply_loansathi_schema($pdo);
 
-CREATE TABLE IF NOT EXISTS admin_users (
-  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(60) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  full_name VARCHAR(120),
-  role ENUM('admin','editor') DEFAULT 'admin',
-  last_login_at TIMESTAMP NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS posts (
-  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  slug VARCHAR(200) UNIQUE NOT NULL,
-  title VARCHAR(200) NOT NULL,
-  excerpt VARCHAR(300),
-  body MEDIUMTEXT NOT NULL,
-  cover_image VARCHAR(255),
-  category VARCHAR(40),
-  meta_title VARCHAR(70),
-  meta_description VARCHAR(170),
-  status ENUM('draft','published') DEFAULT 'draft',
-  published_at TIMESTAMP NULL,
-  author_id INT UNSIGNED,
-  view_count INT UNSIGNED DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (author_id) REFERENCES admin_users(id) ON DELETE SET NULL,
-  INDEX idx_status_pub (status, published_at),
-  INDEX idx_category (category)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS rate_limit_log (
-  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  ip_address VARCHAR(45) NOT NULL,
-  event_type ENUM('form_submit','login_fail') NOT NULL,
-  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_ip_type_time (ip_address, event_type, submitted_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-SQL;
-          foreach (explode(';', $schema) as $stmt) {
-              $stmt = trim($stmt);
-              if ($stmt !== '') $pdo->exec($stmt);
-          }
           $hash = password_hash($p, PASSWORD_BCRYPT);
           $pdo->prepare("INSERT INTO admin_users(username, password_hash, full_name) VALUES(?,?,?)")
               ->execute([$u, $hash, $n]);
@@ -190,7 +95,7 @@ SQL;
       }
   } else {
       echo '<div class="err">' . implode("\n", array_map('htmlspecialchars', $errors)) . '</div>';
-      $step = 'form'; // re-show
+      $step = 'form';
   }
 endif;
 
@@ -210,8 +115,7 @@ if ($step === 'form'): ?>
   </form>
   <div class="warn">
     <strong>Heads-up:</strong> after a successful install, <em>delete this file</em>
-    (<code>public/setup.php</code>) from the server. It guards itself with SETUP_KEY
-    and admin-exists checks, but it has no business living on a production site.
+    (<code>public/setup.php</code>) from the server.
   </div>
 <?php endif; ?>
 

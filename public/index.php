@@ -13,7 +13,10 @@ ini_set('error_log', __DIR__ . '/../storage/logs/php-error-' . date('Y-m-d') . '
 
 ini_set('session.cookie_httponly', '1');
 ini_set('session.cookie_samesite', 'Lax');
-if (($_SERVER['HTTPS'] ?? '') === 'on') {
+$https = (($_SERVER['HTTPS'] ?? '') === 'on')
+      || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+      || (($_SERVER['HTTP_X_FORWARDED_SSL'] ?? '') === 'on');
+if ($https) {
     ini_set('session.cookie_secure', '1');
 }
 session_start();

@@ -32,6 +32,8 @@ composer install --no-dev --optimize-autoloader --prefer-source --no-progress
 echo "==> Copying application files into $OUT"
 # Everything the server runs at request time
 cp -R public src bin vendor storage composer.json "$OUT/"
+rm -f "$OUT/src/config/db.php"
+rm -f "$OUT/storage/logs/"*.log 2>/dev/null || true
 
 # Deploy helpers
 cp deploy/setup.php           "$OUT/public/setup.php"
@@ -97,7 +99,7 @@ echo "  1. Upload release/$NAME.zip to Hostinger File Manager (~/public_html or 
 echo "  2. Extract the zip in place; rename loansathi-$STAMP -> the folder you want"
 echo "  3. Move the extracted contents up into public_html/ (or set custom root)"
 echo "  4. Copy .env.example -> .env, fill in real values"
-echo "  5. Copy src/config/db.php.example -> src/config/db.php, fill in DB creds"
+echo "  5. Fill DB_* in .env with your hosting database credentials"
 echo "  6. Visit https://yourdomain/setup.php?key=<SETUP_KEY> once, then DELETE setup.php"
 echo
 echo "Full guide: deploy/DEPLOY.md"

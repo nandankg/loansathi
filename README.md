@@ -14,9 +14,8 @@ Prereqs: XAMPP (Apache + MySQL + PHP 8.1), Node 18+, Composer 2.
 composer install
 npm install
 
-# Copy config
-cp src/config/db.php.example src/config/db.php
-# Edit src/config/db.php with your local DB credentials
+# Copy config and edit DB_* values
+cp .env.example .env
 
 # Create DB and tables
 php bin/install.php

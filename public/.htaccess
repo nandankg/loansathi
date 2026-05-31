@@ -1,7 +1,5 @@
 # Rewrite all non-existent files/dirs to index.php
 RewriteEngine On
-RewriteBase /
-
 # Block sensitive dirs (defense in depth — they're outside web root anyway)
 RewriteRule ^(\.git|src|content|storage|bin|tests|vendor|node_modules)/ - [F,L]
 
@@ -18,7 +16,11 @@ RewriteRule ^ index.php [QSA,L]
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self';"
+  # Alpine.js v3 (default build) evaluates directive expressions via the Function()
+  # constructor, which requires 'unsafe-eval'. Without it the CSP silently blocks
+  # every x-show / x-data / @click / @submit, so the mobile menu, lead form, EMI
+  # calculator, and FAQ accordions all stop working on hosts that enforce CSP.
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self';"
 </IfModule>
 
 <IfModule mod_headers.c>

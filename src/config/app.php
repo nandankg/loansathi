@@ -9,7 +9,10 @@ return [
   'tagline'         => 'Your trusted loan companion',
   'base_url'        => $env('BASE_URL') ?: (function() {
                         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-                        $scheme = (($_SERVER['HTTPS'] ?? '') === 'on') ? 'https' : 'http';
+                        $https = (($_SERVER['HTTPS'] ?? '') === 'on')
+                              || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+                              || (($_SERVER['HTTP_X_FORWARDED_SSL'] ?? '') === 'on');
+                        $scheme = $https ? 'https' : 'http';
                         return $scheme . '://' . $host;
                       })(),
   'contact' => [

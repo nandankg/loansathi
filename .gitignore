@@ -23,6 +23,8 @@ public/assets/css/site.css
 
 # Logs
 storage/logs/*.log
+storage/sessions/*
+!storage/sessions/.gitkeep
 *.log
 
 # IDE / OS

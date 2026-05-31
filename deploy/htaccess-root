@@ -9,8 +9,6 @@
 Options -Indexes
 
 RewriteEngine On
-RewriteBase /
-
 # Block direct access to sensitive folders. Defense in depth — each folder also
 # carries its own .htaccess with "Require all denied".
 RewriteRule ^(\.git|src|vendor|storage|bin|tests|node_modules|deploy)(/|$) - [F,L]

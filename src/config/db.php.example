@@ -1,4 +1,6 @@
 <?php
+// Optional legacy database config. Shared-hosting installs can use DB_* values
+// in .env instead and do not need to create this file.
 return [
   'host'     => '127.0.0.1',
   'port'     => 3306,
